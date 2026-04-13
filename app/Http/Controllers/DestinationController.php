@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 use App\Models\Destination;
 use Illuminate\Http\Request;
 
+
 class DestinationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $destinations = Destination::all();
+       $keyword = $request->input('search');
+      
+        if ($keyword !='') {
+            $destinations = Destination::where('nama', 'LIKE', "%{$keyword}%")->paginate(5);
+        }else{
+            $destinations = Destination::paginate(5);
+        }
         return view('pages.indexDestination', compact('destinations'));
     }   
     public function show($id)

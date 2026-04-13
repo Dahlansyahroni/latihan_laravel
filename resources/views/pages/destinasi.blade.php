@@ -258,7 +258,7 @@ iframe {
 const data = {
     tokyo:{
         nama:"Tokyo",
-        gambar:"https://source.unsplash.com/800x400/?tokyo,people",
+        gambar:"https://wallpapercave.com/wp/wp8438159.jpg",
         harga:"Rp 12.000.000",
         durasi:"5 Hari",
         transportasi:"Pesawat",
@@ -268,7 +268,7 @@ const data = {
     },
     london:{
         nama:"London",
-        gambar:"https://source.unsplash.com/800x400/?london,travel",
+        gambar:"https://wallpaperaccess.com/full/32545.jpg",
         harga:"Rp 15.000.000",
         durasi:"6 Hari",
         transportasi:"Pesawat",
@@ -288,7 +288,7 @@ const data = {
     },
     riau:{
         nama:"Riau",
-        gambar:"https://source.unsplash.com/800x400/?indonesia,beach",
+        gambar:"https://deih43ym53wif.cloudfront.net/fisabilillah-barelang-bridge-batam-indonesia-shutterstock_1482544481.jpg_2064957538.jpg",
         harga:"Rp 2.000.000",
         durasi:"3 Hari",
         transportasi:"Mobil",
