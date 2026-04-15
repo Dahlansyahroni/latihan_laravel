@@ -16,16 +16,16 @@ class DestinationController extends Controller
         }else{
             $destinations = Destination::paginate(5);
         }
-        return view('pages.indexDestination', compact('destinations'));
+        return view('pages.destination.indexDestination', compact('destinations'));
     }   
     public function show($id)
     {
         $destination = Destination::findOrFail($id);
-        return view('pages.destinasi1', compact('destination'));
+        return view('pages.destination.destinasi1', compact('destination'));
     }
     public function create()
     {
-        return view('pages.createDestination');
+        return view('pages.destination.createDestination');
     }
     public function store(Request $request)
     {
@@ -45,7 +45,7 @@ class DestinationController extends Controller
     public function edit($id)
     {
         $destination = Destination::findOrFail($id);
-        return view('pages.editDestination', compact('destination'));
+        return view('pages.destination.editDestination', compact('destination'));
     }
     public function update(Request $request, $id)
     {
