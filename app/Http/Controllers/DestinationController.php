@@ -29,17 +29,28 @@ class DestinationController extends Controller
     }
     public function store(Request $request)
     {
+        $request->validate([
+            'nama' => 'required|min:3|max:100',
+            'description' => 'required|min:10|max:200',
+            'location' => 'required',
+            'working_days' => 'required',
+            'working_hours' => 'required',
+            'ticket_price' => 'required|numeric|min:0|max:5',
+            
+        ]);
+
+
         Destination::create($request->all());
-        return redirect('/destination')->with('success', 'Destination created successfully.');
+        return redirect('/destinations')->with('success', 'Destination created successfully.');
     }
     public function delete($id)
     {
         $destination = Destination::find($id);
         if ($destination){
             $destination->delete();
-            return redirect('/destination')->with('success', 'Destination deleted successfully.');
+            return redirect('/destinations')->with('success', 'Destination deleted successfully.');
         }else{
-        return redirect('/destination')->with('error', 'Destination not found.');
+        return redirect('/destinations')->with('error', 'Destination not found.');
         }
     }
     public function edit($id)
@@ -49,13 +60,26 @@ class DestinationController extends Controller
     }
     public function update(Request $request, $id)
     {
+       $validated = $request->validate([
+            'nama' => 'required|min:3|max:100',
+            'description' => 'required|min:10|max:256',
+            'location' => 'required',
+            'working_days' => 'required',
+            'working_hours' => 'required',
+            'ticket_price' => 'required',
+        ]);
+        \App\Models\Destination::findOrFail($id)->update($validated);
+        
       
+
+
+
         $destination = Destination::findOrFail($id);
         if ($destination) {
             $destination->update($request->all());
-            return redirect('/destination')->with('success', 'Destination updated successfully.');
+            return redirect('/destinations')->with('success', 'Destination updated successfully.');
         } else {
-            return redirect('/destination')->with('error', 'Destination not found.');
+            return redirect('/destinations')->with('error', 'Destination not found.');
         }
     }
     
