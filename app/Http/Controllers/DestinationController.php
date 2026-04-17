@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Destination;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 
 class DestinationController extends Controller
 {
@@ -36,6 +36,7 @@ class DestinationController extends Controller
             'working_days' => 'required',
             'working_hours' => 'required',
             'ticket_price' => 'required|numeric|min:0|max:5',
+            'image' => 'nullable|image|max:2048|mimes:jpg,jpeg,png',
             
         ]);
 
@@ -67,6 +68,7 @@ class DestinationController extends Controller
             'working_days' => 'required',
             'working_hours' => 'required',
             'ticket_price' => 'required',
+            'image' => 'nullable|image|max:2048|mimes:jpg,jpeg,png',
         ]);
         \App\Models\Destination::findOrFail($id)->update($validated);
         
@@ -75,6 +77,15 @@ class DestinationController extends Controller
 
 
         $destination = Destination::findOrFail($id);
+
+        if ($destination) {
+            if ($destination->image && $request->hasFile('image')) {
+                Storage::disk('public')->delete('images'/$destination->image);
+            }
+            if ($request->hasFile('image'))
+                $imagePath = $request->file('image')->store('image', 'public');
+                $validated['image'] = basename($imagePath);
+        }
         if ($destination) {
             $destination->update($request->all());
             return redirect('/destinations')->with('success', 'Destination updated successfully.');
