@@ -21,8 +21,8 @@ class UserController extends Controller
     }   
     public function show($id)
     {
-        $users = User::findOrFail($id);
-        return view('pages.user.user1', compact('users'));
+        $user = User::findOrFail($id);
+        return view('pages.user.showuser', compact('user'));
     }
     public function create()
     {
@@ -30,53 +30,46 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-       $request->validate([
-    'name' => 'required|min:3',
-    'email' => 'required|email|unique:users,email,' . $request->id,
-    'password' => 'nullable|min:6',
-]);
-        User::create($request->all());
+        $validated = $request->validate([
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+        ]);
+
+        $validated['password'] = bcrypt($request->password);
+        User::create($validated);
+        
         return redirect('/users')->with('success', 'User created successfully.');
     }
-    public function delete($id)
+    public function destroy($id)
     {
-        $users = User::find($id);
-        if ($users){
-            $users->delete();
-            return redirect('/users')->with('success', 'User deleted successfully.');
-        }else{
-        return redirect('/users')->with('error', 'User not found.');
-        }
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect('/users')->with('success', 'User deleted successfully.');
     }
     public function edit($id)
     {
-        $users = User::findOrFail($id);
-        return view('pages.user.editUser', compact('users'));
+        $user = User::findOrFail($id);
+        return view('pages.user.editUser', compact('user'));
     }
-   public function update(Request $request, User $user)
-{
-    $request->validate([
-        'name' => 'required|min:3',
-        'email' => 'required|email|unique:users,email,' . $user->id,
-        'password' => 'nullable|min:6',
-    ]);
-
-    $user->name = $request->name;
-    $user->email = $request->email;
-
-    // hanya ubah password jika diisi
-    if ($request->filled('password')) {
-        $user->password = bcrypt($request->password);
-    }
-
-    $user->save();
-
-    return redirect()->route('users.index')
-        ->with('success', 'User berhasil diupdate');
-}
-    public function showuser($id)
+    public function update(Request $request, $id)
     {
-        $users = User::findOrFail($id);
-        return view('pages.user.showuser', compact('users'));
+        $user = User::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:6',
+        ]);
+
+        if ($request->filled('password')) {
+            $validated['password'] = bcrypt($request->password);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()->route('users.index')
+            ->with('success', 'User berhasil diupdate');
     }
 }

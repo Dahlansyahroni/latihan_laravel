@@ -64,7 +64,7 @@
               return redirect()->route('reviews.index')->with('success', 'Review updated successfully.');
          }
       
-          public function delete($id)
+          public function destroy($id)
           {
         $reviews = Review::findOrFail($id);
         $reviews->delete();

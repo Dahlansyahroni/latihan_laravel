@@ -43,36 +43,26 @@ class AttractionController extends Controller
     public function edit($id)
     {
         $destinations = Destination::all();
-         $attractions = Attraction::findOrFail($id);
-        return view('pages.attraction.editAttraction', compact('attractions', 'destinations'));
+        $attractions = Attraction::findOrFail($id);
+        return view('pages.attraction.updateAttraction', compact('attractions', 'destinations'));
     }
-    public function delete($id)
+    public function destroy($id)
     {
-        $attractions = Attraction::find($id);
-        if ($attractions) {
-            $attractions->delete();
-            return redirect('/attractions')->with('success', 'Attraction deleted successfully.');
-        } else {
-            return redirect('/attractions')->with('error', 'Attraction not found.');
-        }
+        $attraction = Attraction::findOrFail($id);
+        $attraction->delete();
+        return redirect('/attractions')->with('success', 'Attraction deleted successfully.');
     }
     public function update(Request $request, $id)
     {
-            $validated = $request->validate([
-                'destination_id' => 'required|exists:destinations,id',
-                'name' => 'required|min:3|max:100',
-                'description' => 'required|min:5',
-            ]);
-            \App\Models\Attraction::findOrFail($id)->update($validated);
-          
+        $validated = $request->validate([
+            'destination_id' => 'required|exists:destinations,id',
+            'name' => 'required|min:3|max:100',
+            'description' => 'required|min:5',
+        ]);
 
+        $attraction = Attraction::findOrFail($id);
+        $attraction->update($validated);
 
-        $attractions = Attraction::findOrFail($id);
-        if ($attractions) {
-            $attractions->update($request->all());
-            return redirect('/attractions')->with('success', 'Attraction updated successfully.');
-        } else {
-            return redirect('/attractions')->with('error', 'Attraction not found.');
-        }
+        return redirect('/attractions')->with('success', 'Attraction updated successfully.');
     }
 }
